@@ -16,7 +16,7 @@
         "id": 1
       }
   register: auth_result
-  no_log: true  # Скрыть логи с паролем
+  no_log: true
 
 - name: Create Zabbix Host
   uri:
