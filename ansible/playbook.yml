@@ -9,13 +9,9 @@
     zabbix_api_pass: "{{ zabbix_api_pass }}"
   
   tasks:
-    - name: Configure Windows VMs
-      hosts: windows
-      gather_facts: no
-      tasks:
-        - name: Wait for WinRM connectivity
-          wait_for_connection:
-            timeout: 600
+    - name: Wait for WinRM connectivity
+      wait_for_connection:
+         timeout: 600
       
     - name: Install Zabbix Agent
       win_package:
