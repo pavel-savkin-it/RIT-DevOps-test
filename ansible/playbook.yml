@@ -9,9 +9,12 @@
     zabbix_api_pass: "{{ zabbix_api_pass }}"
   
   tasks:
-    - name: Wait for WinRM connectivity
-      wait_for_connection:
-         timeout: 600
+    - name: Wait for WinRM port (5985) to be open
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 5985
+        timeout: 600  # 10 min
+      delegate_to: localhost
       
     - name: Install Zabbix Agent
       win_package:
