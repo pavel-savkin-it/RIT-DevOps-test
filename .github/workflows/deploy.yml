@@ -1,0 +1,44 @@
+name: Deploy RIT Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment (prod/test)'
+        required: true
+        default: 'prod'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.7
+
+    - name: Terraform Init
+      run: terraform init -input=false ./terraform
+      env:
+        TF_VAR_nutanix_user: ${{ secrets.NUTANIX_USER }}
+        TF_VAR_nutanix_pass: ${{ secrets.NUTANIX_PASSWORD }}
+        TF_VAR_admin_vm_password: ${{ secrets.ADMIN_VM_PASSWORD }}
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve ./terraform
+
+    - name: Configure VMs with Ansible
+      uses: ansible/ansible-action@master
+      with:
+        playbook: ansible/playbook.yml
+        inventory: ansible/inventory/hosts
+      env:
+        zabbix_server_ip: ${{ vars.ZABBIX_SERVER_IP }}
+        zabbix_api_user: ${{ secrets.ZABBIX_API_USER }}
+        zabbix_api_pass: ${{ secrets.ZABBIX_API_PASS }}
+        vault_domain_pass: ${{ secrets.DOMAIN_ADMIN_PASSWORD }}

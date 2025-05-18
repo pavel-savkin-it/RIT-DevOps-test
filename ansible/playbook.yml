@@ -1,0 +1,41 @@
+---
+- name: Configure RIT Windows VMs
+  hosts: windows
+  vars:
+    domain_admin_user: "ad_admin"
+    domain_admin_password: "{{ vault_domain_pass }}"
+    zabbix_server_ip: "{{ zabbix_server_ip }}"
+    zabbix_api_user: "{{ zabbix_api_user }}"
+    zabbix_api_pass: "{{ zabbix_api_pass }}"
+  
+  tasks:
+    - name: Install Zabbix Agent
+      win_package:
+        path: https://repo.zabbix.com/zabbix/6.0/windows/zabbix_agent-6.0.0.win-amd64.msi
+        arguments: /quiet SERVER={{ zabbix_server_ip }} HOSTNAME={{ inventory_hostname }}
+      become: yes
+      become_method: runas
+      become_user: "{{ admin_vm_user }}"
+      vars:
+        ansible_become_password: "{{ admin_vm_pass }}"
+
+    - name: Open Zabbix Port (10050/TCP)
+      win_firewall_rule:
+        name: "Zabbix Agent"
+        localport: 10050
+        action: allow
+        protocol: tcp
+        direction: in
+        state: present
+
+    - name: Set hostname and join domain
+      community.windows.win_domain_membership:
+        hostname: "win-{{ inventory_hostname }}"
+        dns_domain_name: "corp.local"
+        domain_admin_user: "{{ domain_admin_user }}"
+        domain_admin_password: "{{ domain_admin_password }}"
+        reboot: yes
+
+    - name: Register host in Zabbix via API
+      include_role:
+        name: zabbix

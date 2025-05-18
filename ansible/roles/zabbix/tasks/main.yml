@@ -1,0 +1,51 @@
+---
+- name: Get Zabbix Auth Token
+  uri:
+    url: "http://{{ zabbix_server_ip }}/api_jsonrpc.php"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+    body: |
+      {
+        "jsonrpc": "2.0",
+        "method": "user.login",
+        "params": {
+          "user": "{{ zabbix_api_user }}",
+          "password": "{{ zabbix_api_pass }}"
+        },
+        "id": 1
+      }
+  register: auth_result
+  no_log: true  # Скрыть логи с паролем
+
+- name: Create Zabbix Host
+  uri:
+    url: "http://{{ zabbix_server_ip }}/api_jsonrpc.php"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+    body: |
+      {
+        "jsonrpc": "2.0",
+        "method": "host.create",
+        "params": {
+          "host": "{{ inventory_hostname }}",
+          "interfaces": [
+            {
+              "type": 1,
+              "main": 1,
+              "useip": 1,
+              "ip": "{{ inventory_hostname }}",
+              "dns": "",
+              "port": "10050"
+            }
+          ],
+          "groups": [{"groupid": "2"}],
+          "templates": [{"templateid": "10104"}]
+        },
+        "auth": "{{ auth_result.json.result }}",
+        "id": 2
+      }
+  register: zabbix_result
+  failed_when: zabbix_result.json.result.hostids is not defined
+  no_log: true

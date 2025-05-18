@@ -1,0 +1,8 @@
+# Terraform
+terraform/variables.auto.tfvars
+terraform/.terraform/
+terraform/*.tfstate
+
+# Ansible
+ansible/group_vars/windows.yml
+ansible/inventory/hosts
