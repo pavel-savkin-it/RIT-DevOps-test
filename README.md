@@ -53,12 +53,12 @@ ADMIN_VM_PASSWORD, DOMAIN_ADMIN_PASSWORD
 
 ZABBIX_SERVER_IP, ZABBIX_API_USER, ZABBIX_API_PASS.
 
-###3. Töövoog GitHub Actionsis
+### 3. Töövoog GitHub Actionsis
 Ava Actions → Deploy Infrastructure → Run workflow.
 
 Vali keskkond (prod või test) ja vajuta Run workflow.
 
-###4. Kohalik käivitamine (valikuline)
+### 4. Kohalik käivitamine (valikuline)
 ```bash
 # Terraform
 cd terraform
@@ -69,7 +69,7 @@ terraform apply -var="admin_vm_password=sinu_parool"
 cd ../ansible
 ansible-playbook playbook.yml -i inventory/hosts --ask-vault-pass
 ```
-# WinRM Seadistus
+## WinRM Seadistus
 Enne templati loomist Nutanixis käivita Windows VM-is:
 
 ```powershell
@@ -137,7 +137,7 @@ Kontrolli Zabbixi API kasutaja õigusi.
 
 Vaata Ansible'i logi (-vvv täpsemaks veateateks).
 
-Litsents ja kontakt
+## Litsents ja kontakt
 Autor: Pavel Savkin
 E-post: pavel.savkin.it@gmail.com
 Litsents: MIT
