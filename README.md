@@ -139,20 +139,6 @@ resource "nutanix_virtual_machine" "windows_vm" {
 Käivita uuesti terraform apply.
 
 ---
-## **Tõrkeotsing**
-Ansible ei ühendu VM-iga:
-
-Kontrolli WinRM seadeid templatis.
-
-Veendu, et admin_vm_password on õige.
-
-Zabbix ei näe hosti:
-
-Kontrolli Zabbixi API kasutaja õigusi.
-
-Vaata Ansible'i logi (-vvv täpsemaks veateateks).
-
----
 ## **Litsents ja kontakt**
 Autor: Pavel Savkin
 E-post: pavel.savkin.it@gmail.com
