@@ -1,7 +1,7 @@
 # RIT DevOps test – Windows VM automaatne juurutamine Nutanix platvormil
 
 Automatiseeritud töövoog Windows virtuaalmasinate (VM) loomiseks, konfigureerimiseks ja seireks Nutanix AHV keskkonnas, kasutades Terraformi, Ansible't ja Zabbixi API-t.
-
+```
 ---
 
 ## **Nõuded**
@@ -38,8 +38,10 @@ Automatiseeritud töövoog Windows virtuaalmasinate (VM) loomiseks, konfigureeri
 
 ### 1. Repositooriumi kloonimine
 ```bash
-git clone [https://github.com/pablo102/RIT-DevOps-test]
+git clone https://github.com/RIT-DevOps-test
 cd nutanix-automation
+```
+
 2. GitHub Secretsi seadistamine
 Mine Settings → Secrets and variables → Actions.
 
@@ -57,7 +59,7 @@ Ava Actions → Deploy Infrastructure → Run workflow.
 Vali keskkond (prod või test) ja vajuta Run workflow.
 
 4. Kohalik käivitamine (valikuline)
-bash
+```bash
 # Terraform
 cd terraform
 terraform init
@@ -66,10 +68,11 @@ terraform apply -var="admin_vm_password=sinu_parool"
 # Ansible
 cd ../ansible
 ansible-playbook playbook.yml -i inventory/hosts --ask-vault-pass
+```
 WinRM Seadistus
 Enne templati loomist Nutanixis käivita Windows VM-is:
 
-powershell
+```powershell
 # Aktiveeri WinRM
 Enable-PSRemoting -Force
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin" -Value 0
@@ -77,6 +80,7 @@ Set-NetFirewallRule -Name "WINRM-HTTP-In-TCP" -RemoteAddress Any
 
 # Lõpeta VM ja loo template
 sysprep /generalize /shutdown
+```
 Turvalisus
 Kõik paroolid ja API võtmed hoitakse GitHub Secretsis.
 
@@ -85,6 +89,7 @@ Ansible kasutab krüpteeritud ühendusi WinRM-iga.
 Zabbix API päringud on turvatud HTTPS-iga (kohandatav).
 
 Repositooriumi struktuur
+```
 .
 ├── .github/                  # GitHub Actions töövoogud
 │   └── workflows/
@@ -98,6 +103,7 @@ Repositooriumi struktuur
 │   ├── roles/
 │   └── inventory/
 └── README.md
+```
 Zabbixi integratsiooni detailid
 Hostide automaatne registreerimine: Ansible kasutab Zabbixi API-t, et lisada VM-id seiresüsteemi.
 
@@ -110,11 +116,12 @@ Malli ID: 10104 (Zabbixi "Template OS Windows" – kontrolli Zabbixi versiooni).
 Skaleerimine
 Muuda VM-de arvu Terraformi failis terraform/main.tf:
 
-hcl
+```hcl
 resource "nutanix_virtual_machine" "windows_vm" {
   count = 5  # Muuda 3 → 5
   # ...
 }
+```
 Käivita uuesti terraform apply.
 
 Tõrkeotsing
@@ -132,6 +139,5 @@ Vaata Ansible'i logi (-vvv täpsemaks veateateks).
 
 Litsents ja kontakt
 Autor: Pavel Savkin
-E-post: pavel.savkin@gmail.com
+E-post: pavel.savkin.it@gmail.com
 Litsents: MIT
-
