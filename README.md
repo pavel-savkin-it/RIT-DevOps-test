@@ -38,7 +38,7 @@ Automatiseeritud töövoog Windows virtuaalmasinate (VM) loomiseks, konfigureeri
 
 ### 1. Repositooriumi kloonimine
 ```bash
-git clone https://github.com/sinu-repo.git
+git clone [https://github.com/pablo102/RIT-DevOps-test]
 cd nutanix-automation
 2. GitHub Secretsi seadistamine
 Mine Settings → Secrets and variables → Actions.
