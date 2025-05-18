@@ -1,6 +1,7 @@
 # RIT DevOps test – Windows VM automaatne juurutamine Nutanix platvormil
 
 Automatiseeritud töövoog Windows virtuaalmasinate (VM) loomiseks, konfigureerimiseks ja seireks Nutanix AHV keskkonnas, kasutades Terraformi, Ansible't ja Zabbixi API-t.
+
 ---
 
 ## **Nõuded**
@@ -68,6 +69,7 @@ terraform apply -var="admin_vm_password=sinu_parool"
 cd ../ansible
 ansible-playbook playbook.yml -i inventory/hosts --ask-vault-pass
 ```
+
 ---
 ## **WinRM Seadistus**
 Enne templati loomist Nutanixis käivita Windows VM-is:
@@ -81,6 +83,7 @@ Set-NetFirewallRule -Name "WINRM-HTTP-In-TCP" -RemoteAddress Any
 # Lõpeta VM ja loo template
 sysprep /generalize /shutdown
 ```
+
 ---
 ## **Turvalisus**
 Kõik paroolid ja API võtmed hoitakse GitHub Secretsis.
@@ -88,6 +91,7 @@ Kõik paroolid ja API võtmed hoitakse GitHub Secretsis.
 Ansible kasutab krüpteeritud ühendusi WinRM-iga.
 
 Zabbix API päringud on turvatud HTTPS-iga (kohandatav).
+
 ---
 ## **Repositooriumi struktuur**
 ```
@@ -105,6 +109,7 @@ Zabbix API päringud on turvatud HTTPS-iga (kohandatav).
 │   └── inventory/
 └── README.md
 ```
+
 ---
 ## **Zabbixi integratsiooni detailid**
 Hostide automaatne registreerimine: Ansible kasutab Zabbixi API-t, et lisada VM-id seiresüsteemi.
@@ -114,6 +119,7 @@ Kasutatavad mallid:
 Grupi ID: 2 (Zabbixi vaikimisi "Linux servers" – muuda vastavalt vajadusele).
 
 Malli ID: 10104 (Zabbixi "Template OS Windows" – kontrolli Zabbixi versiooni).
+
 ---
 ## **Skaleerimine**
 Muuda VM-de arvu Terraformi failis terraform/main.tf:
@@ -125,6 +131,7 @@ resource "nutanix_virtual_machine" "windows_vm" {
 }
 ```
 Käivita uuesti terraform apply.
+
 ---
 ## **Tõrkeotsing**
 Ansible ei ühendu VM-iga:
@@ -138,6 +145,7 @@ Zabbix ei näe hosti:
 Kontrolli Zabbixi API kasutaja õigusi.
 
 Vaata Ansible'i logi (-vvv täpsemaks veateateks).
+
 ---
 ## **Litsents ja kontakt**
 Autor: Pavel Savkin
