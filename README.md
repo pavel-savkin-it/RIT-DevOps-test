@@ -42,7 +42,7 @@ git clone https://github.com/RIT-DevOps-test
 cd nutanix-automation
 ```
 
-###2. GitHub Secretsi seadistamine
+### 2. GitHub Secretsi seadistamine
 Mine Settings → Secrets and variables → Actions.
 
 Lisa järgmised salasõnad:
@@ -69,7 +69,7 @@ terraform apply -var="admin_vm_password=sinu_parool"
 cd ../ansible
 ansible-playbook playbook.yml -i inventory/hosts --ask-vault-pass
 ```
-#WinRM Seadistus
+# WinRM Seadistus
 Enne templati loomist Nutanixis käivita Windows VM-is:
 
 ```powershell
@@ -81,14 +81,14 @@ Set-NetFirewallRule -Name "WINRM-HTTP-In-TCP" -RemoteAddress Any
 # Lõpeta VM ja loo template
 sysprep /generalize /shutdown
 ```
-##Turvalisus
+## Turvalisus
 Kõik paroolid ja API võtmed hoitakse GitHub Secretsis.
 
 Ansible kasutab krüpteeritud ühendusi WinRM-iga.
 
 Zabbix API päringud on turvatud HTTPS-iga (kohandatav).
 
-##Repositooriumi struktuur
+## Repositooriumi struktuur
 ```
 .
 ├── .github/                  # GitHub Actions töövoogud
@@ -104,7 +104,7 @@ Zabbix API päringud on turvatud HTTPS-iga (kohandatav).
 │   └── inventory/
 └── README.md
 ```
-##Zabbixi integratsiooni detailid
+## Zabbixi integratsiooni detailid
 Hostide automaatne registreerimine: Ansible kasutab Zabbixi API-t, et lisada VM-id seiresüsteemi.
 
 Kasutatavad mallid:
@@ -113,7 +113,7 @@ Grupi ID: 2 (Zabbixi vaikimisi "Linux servers" – muuda vastavalt vajadusele).
 
 Malli ID: 10104 (Zabbixi "Template OS Windows" – kontrolli Zabbixi versiooni).
 
-##Skaleerimine
+## Skaleerimine
 Muuda VM-de arvu Terraformi failis terraform/main.tf:
 
 ```hcl
@@ -124,7 +124,7 @@ resource "nutanix_virtual_machine" "windows_vm" {
 ```
 Käivita uuesti terraform apply.
 
-##Tõrkeotsing
+## Tõrkeotsing
 Ansible ei ühendu VM-iga:
 
 Kontrolli WinRM seadeid templatis.
