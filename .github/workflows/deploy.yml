@@ -33,7 +33,7 @@ jobs:
       run: terraform apply -auto-approve ./terraform
 
     - name: Configure VMs with Ansible
-      uses: ansible/ansible-action@master
+      uses: arillso/action-ansible-playbook@v1
       with:
         playbook: ansible/playbook.yml
         inventory: ansible/inventory/hosts
