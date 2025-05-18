@@ -1,7 +1,6 @@
 # RIT DevOps test – Windows VM automaatne juurutamine Nutanix platvormil
 
 Automatiseeritud töövoog Windows virtuaalmasinate (VM) loomiseks, konfigureerimiseks ja seireks Nutanix AHV keskkonnas, kasutades Terraformi, Ansible't ja Zabbixi API-t.
-```
 ---
 
 ## **Nõuded**
@@ -12,7 +11,7 @@ Automatiseeritud töövoog Windows virtuaalmasinate (VM) loomiseks, konfigureeri
   - `NUTANIX_PASSWORD`: Nutanix parool.
   - `nutanix_endpoint`: Nutanix Prism Central IP-aadress.
 - **Windows VM template**:
-  - WinRM peab olema aktiveeritud (vt [WinRM seadistus](#winrm-seadistus)).
+  - WinRM peab olema aktiveeritud.
   - Template UUID (`windows_template_id`).
 
 ### 2. Active Directory (AD)
@@ -20,7 +19,7 @@ Automatiseeritud töövoog Windows virtuaalmasinate (VM) loomiseks, konfigureeri
   - Kasutajanimi: `ad_admin` (määratud Ansible playbookis).
   - Parool: `DOMAIN_ADMIN_PASSWORD` (GitHub Secret).
 
-### 3. Zabbix seire
+### 3. Zabbix
 - **Zabbix server**:
   - IP-aadress: `ZABBIX_SERVER_IP` (GitHub Variable).
   - API kasutaja: `ZABBIX_API_USER` (GitHub Secret).
@@ -69,7 +68,8 @@ terraform apply -var="admin_vm_password=sinu_parool"
 cd ../ansible
 ansible-playbook playbook.yml -i inventory/hosts --ask-vault-pass
 ```
-## WinRM Seadistus
+---
+## **WinRM Seadistus**
 Enne templati loomist Nutanixis käivita Windows VM-is:
 
 ```powershell
@@ -81,14 +81,15 @@ Set-NetFirewallRule -Name "WINRM-HTTP-In-TCP" -RemoteAddress Any
 # Lõpeta VM ja loo template
 sysprep /generalize /shutdown
 ```
-## Turvalisus
+---
+## **Turvalisus**
 Kõik paroolid ja API võtmed hoitakse GitHub Secretsis.
 
 Ansible kasutab krüpteeritud ühendusi WinRM-iga.
 
 Zabbix API päringud on turvatud HTTPS-iga (kohandatav).
-
-## Repositooriumi struktuur
+---
+## **Repositooriumi struktuur**
 ```
 .
 ├── .github/                  # GitHub Actions töövoogud
@@ -104,7 +105,8 @@ Zabbix API päringud on turvatud HTTPS-iga (kohandatav).
 │   └── inventory/
 └── README.md
 ```
-## Zabbixi integratsiooni detailid
+---
+## **Zabbixi integratsiooni detailid**
 Hostide automaatne registreerimine: Ansible kasutab Zabbixi API-t, et lisada VM-id seiresüsteemi.
 
 Kasutatavad mallid:
@@ -112,8 +114,8 @@ Kasutatavad mallid:
 Grupi ID: 2 (Zabbixi vaikimisi "Linux servers" – muuda vastavalt vajadusele).
 
 Malli ID: 10104 (Zabbixi "Template OS Windows" – kontrolli Zabbixi versiooni).
-
-## Skaleerimine
+---
+## **Skaleerimine**
 Muuda VM-de arvu Terraformi failis terraform/main.tf:
 
 ```hcl
@@ -123,8 +125,8 @@ resource "nutanix_virtual_machine" "windows_vm" {
 }
 ```
 Käivita uuesti terraform apply.
-
-## Tõrkeotsing
+---
+## **Tõrkeotsing**
 Ansible ei ühendu VM-iga:
 
 Kontrolli WinRM seadeid templatis.
@@ -136,8 +138,8 @@ Zabbix ei näe hosti:
 Kontrolli Zabbixi API kasutaja õigusi.
 
 Vaata Ansible'i logi (-vvv täpsemaks veateateks).
-
-## Litsents ja kontakt
+---
+## **Litsents ja kontakt**
 Autor: Pavel Savkin
 E-post: pavel.savkin.it@gmail.com
 Litsents: MIT
