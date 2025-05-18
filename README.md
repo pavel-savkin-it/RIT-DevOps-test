@@ -80,7 +80,13 @@ Enable-PSRemoting -Force
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin" -Value 0
 Set-NetFirewallRule -Name "WINRM-HTTP-In-TCP" -RemoteAddress Any
 
-# Lõpeta VM ja loo template
+## Keela administraatoritele kinnituse küsimine
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin" -Value 0
+
+## Keela UAC täielikult (valikuline)
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "EnableLUA" -Value 0
+
+## Lõpeta VM ja loo template
 sysprep /generalize /shutdown
 ```
 
