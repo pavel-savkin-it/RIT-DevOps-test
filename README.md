@@ -133,7 +133,6 @@ Muuda VM-de arvu Terraformi failis terraform/main.tf:
 ```hcl
 resource "nutanix_virtual_machine" "windows_vm" {
   count = 5  # Muuda 3 → 5
-  # ...
 }
 ```
 Käivita uuesti terraform apply.
